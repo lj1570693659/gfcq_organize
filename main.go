@@ -1,15 +1,11 @@
 package main
 
 import (
-	_ "github.com/gogf/gf-demos/boot"
-	_ "github.com/gogf/gf-demos/router"
-	"github.com/gogf/gf/frame/g"
+	"gfcq_product/internal/cmd"
+	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
+	"github.com/gogf/gf/v2/os/gctx"
 )
 
-// @title       `gf-demo`示例服务API
-// @version     1.0
-// @description `GoFrame`基础开发框架示例服务API接口文档。
-// @schemes     http
 func main() {
-	g.Server().Run()
+	cmd.Main.Run(gctx.New())
 }
