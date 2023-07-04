@@ -2,12 +2,14 @@
 gfcli:
   gen:
     dao:
-      - link: "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
-        tables: "user"
-        removePrefix: "gf_"
+      - link: "mysql:root:123456@tcp(127.0.0.1:3306)/cqgf_product"
+        tables: "cqgf_department,cqgf_employee,cqgf_employee_job,cqgf_job,cqgf_job_level"
+        removePrefix: "cqgf_"
+        path: "./internal"
         descriptionTag: true
         noModelComment: true
+        jsonCase: "CamelLower"
 
-    pbentity:
-      - link: "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
-        tables: "user"
+    system:
+      - link: "mysql:root:123456@tcp(127.0.0.1:3306)/cqgf_product"
+        tables: "cqgf_department,cqgf_employee,cqgf_employee_job,cqgf_job,cqgf_job_level"

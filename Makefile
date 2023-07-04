@@ -1,7 +1,7 @@
 ROOT_DIR    = $(shell pwd)
-NAMESPACE   = "default"
-DEPLOY_NAME = "gf-demo-grpc"
-DOCKER_NAME = "gf-demo-grpc"
+NAMESPACE   = "gfcq"
+DEPLOY_NAME = "gfcq-organize-grpc"
+DOCKER_NAME = "gfcq-organize-grpc"
 
 # Install/Update to the latest CLI tool.
 .PHONY: cli

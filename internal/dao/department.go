@@ -8,19 +8,19 @@ import (
 	"github.com/lj1570693659/gfcq_product/internal/dao/internal"
 )
 
-// internalUserDao is internal type for wrapping internal DAO implements.
-type internalUserDao = *internal.UserDao
+// internalDepartmentDao is internal type for wrapping internal DAO implements.
+type internalDepartmentDao = *internal.DepartmentDao
 
-// userDao is the data access object for table user.
+// departmentDao is the data access object for table cqgf_department.
 // You can define custom methods on it to extend its functionality as you wish.
-type userDao struct {
-	internalUserDao
+type departmentDao struct {
+	internalDepartmentDao
 }
 
 var (
-	// User is globally public accessible object for table user operations.
-	User = userDao{
-		internal.NewUserDao(),
+	// Department is globally public accessible object for table cqgf_department operations.
+	Department = departmentDao{
+		internal.NewDepartmentDao(),
 	}
 )
 

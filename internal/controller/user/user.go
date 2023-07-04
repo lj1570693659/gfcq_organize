@@ -2,13 +2,12 @@ package user
 
 import (
 	"context"
-	"gfcq_product/internal/dao"
-	"gfcq_product/internal/model/do"
-	"gfcq_product/internal/service"
-
+	"fmt"
 	"github.com/gogf/gf/contrib/rpc/grpcx/v2"
-
-	v1 "github.com/gogf/gf-demo-grpc/api/user/v1"
+	"github.com/lj1570693659/gfcq_product/internal/dao"
+	"github.com/lj1570693659/gfcq_product/internal/model/do"
+	"github.com/lj1570693659/gfcq_product/internal/service"
+	v1 "github.com/lj1570693659/gfcq_protoc/user/v1"
 )
 
 type Controller struct {
@@ -16,6 +15,7 @@ type Controller struct {
 }
 
 func Register(s *grpcx.GrpcServer) {
+	// 将具体实现注册到服务对象中
 	v1.RegisterUserServer(s.Server, &Controller{})
 }
 
@@ -40,9 +40,10 @@ func (*Controller) GetOne(ctx context.Context, req *v1.GetOneReq) (res *v1.GetOn
 }
 
 func (*Controller) GetList(ctx context.Context, req *v1.GetListReq) (res *v1.GetListRes, err error) {
-	res = &v1.GetListRes{}
-	err = dao.User.Ctx(ctx).Page(int(req.Page), int(req.Size)).Scan(&res.Users)
-	return
+	fmt.Println("99999===========================")
+	//res = &v1.GetListRes{}
+	//err = dao.User.Ctx(ctx).Page(int(req.Page), int(req.Size)).Scan(&res.Users)
+	return &v1.GetListRes{}, nil
 }
 
 func (*Controller) Delete(ctx context.Context, req *v1.DeleteReq) (res *v1.DeleteRes, err error) {

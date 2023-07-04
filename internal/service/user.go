@@ -8,7 +8,7 @@ package service
 import (
 	"context"
 
-	"github.com/gogf/gf-demo-grpc/api/pbentity"
+	"github.com/lj1570693659/gfcq_protoc/pbentity"
 )
 
 type (

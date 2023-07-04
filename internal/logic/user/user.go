@@ -2,11 +2,11 @@ package user
 
 import (
 	"context"
-	"gfcq_product/internal/dao"
-	"gfcq_product/internal/model/do"
-	"gfcq_product/internal/service"
+	"github.com/lj1570693659/gfcq_product/internal/dao"
+	"github.com/lj1570693659/gfcq_product/internal/model/do"
+	"github.com/lj1570693659/gfcq_product/internal/service"
 
-	"github.com/gogf/gf-demo-grpc/api/pbentity"
+	"github.com/lj1570693659/gfcq_protoc/pbentity"
 )
 
 type (
