@@ -44,13 +44,12 @@ func (s *sDepartment) Create(ctx context.Context, in *v1.DepartmentInfo) (*v1.De
 		Pid:  in.GetPid(),
 		Name: in.GetName(),
 	})
-	if (err != nil && err != sql.ErrNoRows) || g.IsNil(info) {
+	if (err != nil && err != sql.ErrNoRows) || !g.IsNil(info) {
 		return in, err
 	}
 	if info != nil && info.Id > 0 {
 		return in, errors.New("该部门下已存在同名部门，请重新命名")
 	}
-
 	data := do.Department{
 		Pid:        in.Pid,
 		Name:       in.Name,
@@ -121,6 +120,36 @@ func (s *sDepartment) GetList(ctx context.Context, in *v1.DepartmentInfo, page, 
 	res.TotalSize = totalSize
 	res.Data = resData
 	return res, err
+}
+
+func (s *sDepartment) GetListWithoutPage(ctx context.Context, in *v1.DepartmentInfo) (res *v1.GetListWithoutDepartmentRes, err error) {
+	resData := make([]*v1.DepartmentInfo, 0)
+
+	query := dao.Department.Ctx(ctx)
+	condition := g.Map{}
+
+	if len(in.GetName()) > 0 {
+		condition[fmt.Sprintf("%s like ?", dao.Department.Columns().Name)] = fmt.Sprintf("%s%s%s", "%", in.GetName(), "%")
+	}
+
+	if in.GetId() > 0 {
+		condition[dao.Department.Columns().Id] = in.GetId()
+	}
+
+	if in.GetPid() > 0 {
+		condition[dao.Department.Columns().Pid] = in.GetPid()
+	} else if in.GetPid() == -1 {
+		condition[dao.Department.Columns().Pid] = 0
+	}
+
+	err = query.Where(condition).Scan(&resData)
+	if err != nil {
+		return res, err
+	}
+
+	return &v1.GetListWithoutDepartmentRes{
+		Data: resData,
+	}, err
 }
 
 func (s *sDepartment) Modify(ctx context.Context, in *v1.DepartmentInfo) (*v1.DepartmentInfo, error) {
@@ -196,12 +225,13 @@ func (s *sDepartment) Delete(ctx context.Context, id int32) (isSuccess bool, msg
 		}
 	}
 
-	// 删除部门时，该部门下不能存在员工信息 TODO
+	// 删除部门时，该部门下不能存在员工信息
 	employeeInfo, err := service.Employee().GetOne(ctx, &v1.GetOneEmployeeReq{DepartId: []int32{id}})
 	if err != nil && err != sql.ErrNoRows {
 		return false, "当前数据有误，请联系相关维护人员", err
 	}
-	if !g.IsNil(employeeInfo) {
+
+	if !g.IsNil(employeeInfo) && !g.IsEmpty(employeeInfo.GetEmployee()) {
 		return false, "请先移除当前部门下的员工信息", errors.New(fmt.Sprintf("当前部门存在员工信息ID：%d,工号:%s", employeeInfo.Employee.Id, employeeInfo.Employee.WorkNumber))
 	}
 

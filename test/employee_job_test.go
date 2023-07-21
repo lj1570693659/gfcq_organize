@@ -12,7 +12,7 @@ import (
 func Test_EmployeeJob_GetList(t *testing.T) {
 	var (
 		ctx    = gctx.GetInitCtx()
-		conn   = grpcx.Client.MustNewGrpcClientConn("employee")
+		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
 		depert = v1.NewEmployeeJobClient(conn)
 		res    *v1.GetListEmployeeJobRes
 		err    error
@@ -39,10 +39,33 @@ func Test_EmployeeJob_GetList(t *testing.T) {
 
 }
 
+func Test_EmployeeJob_GetCount(t *testing.T) {
+	var (
+		ctx    = gctx.GetInitCtx()
+		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
+		depert = v1.NewEmployeeJobClient(conn)
+		res    *v1.GetCountEmployeeJobRes
+		err    error
+	)
+	res, err = depert.GetCount(ctx, &v1.GetCountEmployeeJobReq{
+		GroupBy:           "employee_id",
+		GetFiledNameCount: "employee_id",
+		EmployeeJob: &v1.EmployeeJobInfo{
+			DepartId: 5,
+		},
+	})
+	fmt.Println("res=============", res)
+	fmt.Println("err=============", err)
+	if err != nil {
+		g.Log().Fatalf(ctx, `get user list failed: %+v`, err)
+	}
+
+}
+
 func Test_EmployeeJob_GetOne(t *testing.T) {
 	var (
 		ctx    = gctx.GetInitCtx()
-		conn   = grpcx.Client.MustNewGrpcClientConn("employee")
+		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
 		depert = v1.NewEmployeeJobClient(conn)
 		res    *v1.GetOneEmployeeJobRes
 		err    error
@@ -61,7 +84,7 @@ func Test_EmployeeJob_GetOne(t *testing.T) {
 func Test_EmployeeJob_Create(t *testing.T) {
 	var (
 		ctx    = gctx.GetInitCtx()
-		conn   = grpcx.Client.MustNewGrpcClientConn("employee")
+		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
 		depert = v1.NewEmployeeJobClient(conn)
 		res    *v1.CreateEmployeeJobRes
 		err    error
@@ -82,7 +105,7 @@ func Test_EmployeeJob_Create(t *testing.T) {
 func Test_EmployeeJob_Modify(t *testing.T) {
 	var (
 		ctx    = gctx.GetInitCtx()
-		conn   = grpcx.Client.MustNewGrpcClientConn("employee")
+		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
 		depert = v1.NewEmployeeJobClient(conn)
 		res    *v1.ModifyEmployeeJobRes
 		err    error
@@ -104,7 +127,7 @@ func Test_EmployeeJob_Modify(t *testing.T) {
 func Test_EmployeeJob_Delete(t *testing.T) {
 	var (
 		ctx    = gctx.GetInitCtx()
-		conn   = grpcx.Client.MustNewGrpcClientConn("employee")
+		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
 		depert = v1.NewEmployeeJobClient(conn)
 		res    *v1.DeleteEmployeeJobRes
 		err    error

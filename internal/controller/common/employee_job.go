@@ -21,6 +21,12 @@ func (s *EmployeeJobController) GetList(ctx context.Context, in *v1.GetListEmplo
 	return res, err
 }
 
+// GetCount implements GetCount
+func (s *EmployeeJobController) GetCount(ctx context.Context, in *v1.GetCountEmployeeJobReq) (*v1.GetCountEmployeeJobRes, error) {
+	res, err := service.EmployeeJob().GetCount(ctx, in)
+	return res, err
+}
+
 func (s *EmployeeJobController) GetOne(ctx context.Context, in *v1.GetOneEmployeeJobReq) (*v1.GetOneEmployeeJobRes, error) {
 	res, err := service.EmployeeJob().GetOne(ctx, &v1.EmployeeJobInfo{
 		EmployeeId: in.GetEmployeeId(),

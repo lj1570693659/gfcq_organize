@@ -21,6 +21,11 @@ func (s *DepartmentController) GetList(ctx context.Context, in *v1.GetListDepart
 	return res, err
 }
 
+func (s *DepartmentController) GetListWithoutPage(ctx context.Context, in *v1.GetListWithoutDepartmentReq) (*v1.GetListWithoutDepartmentRes, error) {
+	res, err := service.Department().GetListWithoutPage(ctx, in.GetDepartment())
+	return res, err
+}
+
 func (s *DepartmentController) GetOne(ctx context.Context, in *v1.GetOneDepartmentReq) (*v1.GetOneDepartmentRes, error) {
 	res, err := service.Department().GetOne(ctx, &v1.DepartmentInfo{
 		Id:   in.Id,

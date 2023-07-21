@@ -39,6 +39,30 @@ func Test_JobLevel_GetList(t *testing.T) {
 
 }
 
+func Test_JobLevel_GetAll(t *testing.T) {
+	var (
+		ctx    = gctx.GetInitCtx()
+		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
+		depert = v1.NewJobLevelClient(conn)
+		res    *v1.GetAllJobLevelRes
+		err    error
+	)
+	res, err = depert.GetAll(ctx, &v1.GetAllJobLevelReq{
+		JobLevel: &v1.JobLevelInfo{},
+		Sort:     v1.OrderEnum_desc,
+	})
+	fmt.Println("res=============", res)
+	fmt.Println("err=============", err)
+	if err != nil {
+		g.Log().Fatalf(ctx, `get user list failed: %+v`, err)
+	}
+
+	for _, v := range res.GetData() {
+		fmt.Println(v)
+	}
+
+}
+
 func Test_JobLevel_GetOne(t *testing.T) {
 	var (
 		ctx    = gctx.GetInitCtx()

@@ -83,7 +83,7 @@ func (s *sEmployee) Create(ctx context.Context, in *v1.CreateEmployeeReq) (*v1.C
 }
 
 func (s *sEmployee) GetOne(ctx context.Context, in *v1.GetOneEmployeeReq) (*v1.GetOneEmployeeRes, error) {
-	var employee *v1.EmployeeInfo
+	employee := &v1.EmployeeInfo{}
 	res := &v1.GetOneEmployeeRes{}
 	query := dao.Employee.Ctx(ctx)
 	if in.GetId() > 0 {
@@ -106,16 +106,29 @@ func (s *sEmployee) GetOne(ctx context.Context, in *v1.GetOneEmployeeReq) (*v1.G
 		query = query.Where(fmt.Sprintf("%s like ?", dao.Employee.Columns().Phone), g.Slice{fmt.Sprintf("%s%s", in.GetPhone(), "%")})
 	}
 
+	if len(library.DeleteIntSlice(in.GetJobLevel())) > 0 {
+		query = query.WhereIn(dao.Employee.Columns().JobLevel, in.GetJobLevel())
+	}
+
 	if in.GetStatus() > 0 {
 		query = query.Where(dao.Employee.Columns().Status, in.GetStatus())
+	}
+	if len(in.DepartId) > 0 {
+		queryBuilder := query.Builder().Where(fmt.Sprintf("FIND_IN_SET(%d,%s)", in.DepartId[0], dao.Employee.Columns().DepartId))
+		for _, departId := range in.DepartId[1:] {
+			queryBuilder = queryBuilder.WhereOr(fmt.Sprintf("FIND_IN_SET(%d,%s)", departId, dao.Employee.Columns().DepartId))
+		}
+		query = query.Where(queryBuilder)
 	}
 
 	err := query.Scan(&employee)
 	res.Employee = employee
-	res.DepartString = employee.DepartId
-	res.DepartIds = gconv.Int32s(strings.Split(employee.DepartId, ","))
-	res.JobIds = gconv.Int32s(strings.Split(employee.JobId, ","))
-	res.JobIdString = employee.JobId
+	if err != nil && err != sql.ErrNoRows {
+		res.DepartString = employee.DepartId
+		res.DepartIds = gconv.Int32s(strings.Split(employee.DepartId, ","))
+		res.JobIds = gconv.Int32s(strings.Split(employee.JobId, ","))
+		res.JobIdString = employee.JobId
+	}
 	return res, err
 }
 

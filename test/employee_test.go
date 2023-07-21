@@ -66,20 +66,20 @@ func Test_Employee_GetOne(t *testing.T) {
 func Test_Employee_Create(t *testing.T) {
 	var (
 		ctx    = gctx.GetInitCtx()
-		conn   = grpcx.Client.MustNewGrpcClientConn("employee")
+		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
 		depert = v1.NewEmployeeClient(conn)
 		res    *v1.CreateEmployeeRes
 		err    error
 	)
 	res, err = depert.Create(ctx, &v1.CreateEmployeeReq{
-		Remark:       "测试账号1-备注信息",
-		UserName:     "测试账号1",
-		WorkNumber:   "9046053",
+		Remark:       "部门领导-备注信息",
+		UserName:     "部门领导",
+		WorkNumber:   "909903",
 		Sex:          v1.SexEnum_man,
 		Phone:        "18883185965",
 		Email:        "18883185965@qq.com",
 		JobLevel:     2,
-		JobId:        []int32{2, 5},
+		JobId:        []int32{8, 9},
 		InstructorId: 1,
 		Status:       v1.StatusEnum_interns,
 	})

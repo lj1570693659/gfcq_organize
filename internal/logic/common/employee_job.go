@@ -105,6 +105,27 @@ func (s *sEmployeeJob) GetList(ctx context.Context, in *v1.EmployeeJobInfo, page
 	return res, err
 }
 
+func (s *sEmployeeJob) GetCount(ctx context.Context, in *v1.GetCountEmployeeJobReq) (*v1.GetCountEmployeeJobRes, error) {
+	res := &v1.GetCountEmployeeJobRes{}
+	query := dao.EmployeeJob.Ctx(ctx)
+
+	if in.GetEmployeeJob().GetEmployeeId() > 0 {
+		query = query.Where(dao.EmployeeJob.Columns().EmployeeId, in.GetEmployeeJob().GetEmployeeId())
+	}
+	if in.GetEmployeeJob().GetDepartId() > 0 {
+		query = query.Where(dao.EmployeeJob.Columns().DepartId, in.GetEmployeeJob().GetDepartId())
+	}
+	if in.GetEmployeeJob().GetJobId() > 0 {
+		query = query.Where(dao.EmployeeJob.Columns().JobId, in.GetEmployeeJob().GetJobId())
+	}
+	if in.GetEmployeeJob().GetId() > 0 {
+		query = query.Where(dao.EmployeeJob.Columns().Id, in.GetEmployeeJob().GetId())
+	}
+	count, err := query.Group(in.GetGroupBy()).Count(in.GetGetFiledNameCount())
+	res.Count = gconv.Int32(count)
+	return res, err
+}
+
 func (s *sEmployeeJob) Modify(ctx context.Context, in *v1.EmployeeJobInfo) (*v1.EmployeeJobInfo, error) {
 	if g.IsEmpty(in.GetId()) {
 		return in, errors.New("当前操作的数据有误，请联系相关维护人员")

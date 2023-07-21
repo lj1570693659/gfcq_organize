@@ -1,19 +1,21 @@
 # GRPC Server.
 grpc:
   address: ":9090"
-  name: "employee"
-  logPath: ""
+  name: "organize"
+  logPath: "/tmp/log/"
   logStdout: true
   errorStack: true
   errorLogEnabled: true
   errorLogPattern: "error-{Ymd}.log"
   accessLogEnabled: true
   accessLogPattern: "access-{Ymd}.log"
+  etcdLink: "127.0.0.1:23791"
 
 # Global logging.
 logger:
   level: "all"
   stdout: true
+  logPath: "/tmp/log/"
 
 # Database.
 database:

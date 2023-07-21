@@ -34,7 +34,8 @@ func (s *sJobLevel) Create(ctx context.Context, in *v1.JobLevelInfo) (*v1.JobLev
 	info, err := s.GetOne(ctx, &v1.JobLevelInfo{
 		Name: in.GetName(),
 	})
-	if (err != nil && err != sql.ErrNoRows) || !g.IsNil(info) {
+
+	if err != nil && err != sql.ErrNoRows {
 		return in, err
 	}
 	if !g.IsNil(info) && info.Id > 0 {
@@ -58,7 +59,7 @@ func (s *sJobLevel) Create(ctx context.Context, in *v1.JobLevelInfo) (*v1.JobLev
 	return in, nil
 }
 func (s *sJobLevel) GetOne(ctx context.Context, in *v1.JobLevelInfo) (*v1.JobLevelInfo, error) {
-	var jobLevel *v1.JobLevelInfo
+	jobLevel := &v1.JobLevelInfo{}
 	query := dao.JobLevel.Ctx(ctx)
 
 	if len(in.GetName()) > 0 {
@@ -105,6 +106,40 @@ func (s *sJobLevel) GetList(ctx context.Context, in *v1.JobLevelInfo, page, size
 	res.Data = resData
 	return res, err
 }
+
+func (s *sJobLevel) GetAll(ctx context.Context, in *v1.JobLevelInfo, sort v1.OrderEnum) (*v1.GetAllJobLevelRes, error) {
+	res := &v1.GetAllJobLevelRes{}
+	resData := make([]*v1.JobLevelInfo, 0)
+	jobLevelEntity := make([]entity.JobLevel, 0)
+
+	query := dao.JobLevel.Ctx(ctx)
+
+	if len(in.GetName()) > 0 {
+		query = query.Where(fmt.Sprintf("%s like ?", dao.JobLevel.Columns().Name), g.Slice{fmt.Sprintf("%s%s", in.GetName(), "%")})
+	}
+	if in.GetId() > 0 {
+		query = query.Where(dao.JobLevel.Columns().Id, in.GetId())
+	}
+
+	if len(in.GetRemark()) > 0 {
+		query = query.Where(fmt.Sprintf("%s like ?", dao.JobLevel.Columns().Remark), g.Slice{fmt.Sprintf("%s%s", in.GetRemark(), "%")})
+	}
+
+	switch sort {
+	case v1.OrderEnum_desc:
+		query = query.OrderDesc(dao.JobLevel.Columns().Name)
+	case v1.OrderEnum_asc:
+		query = query.OrderAsc(dao.JobLevel.Columns().Name)
+	}
+
+	err := query.Scan(&jobLevelEntity)
+	jonLevelEntityByte, _ := json.Marshal(jobLevelEntity)
+	json.Unmarshal(jonLevelEntityByte, &resData)
+
+	res.Data = resData
+	return res, err
+}
+
 func (s *sJobLevel) Modify(ctx context.Context, in *v1.JobLevelInfo) (*v1.JobLevelInfo, error) {
 	if len(in.GetName()) == 0 {
 		return in, errors.New("职级名称不能为空")
@@ -142,12 +177,12 @@ func (s *sJobLevel) Delete(ctx context.Context, id int32) (isSuccess bool, msg s
 		return false, "当前数据不存在，请联系相关维护人员", errors.New("接收到的ID在数据库中没有对应数据")
 	}
 
-	// 删除部门时，该部门下不能存在员工信息
+	// 删除职级时，该职级下不能存在员工信息
 	employeeInfo, err := service.Employee().GetOne(ctx, &v1.GetOneEmployeeReq{JobLevel: []int32{id}})
-	if err != nil && err != sql.ErrNoRows {
+	if err != nil && err.Error() != sql.ErrNoRows.Error() {
 		return false, "当前数据有误，请联系相关维护人员", err
 	}
-	if !g.IsNil(employeeInfo) {
+	if !g.IsNil(employeeInfo) && !g.IsEmpty(employeeInfo.GetEmployee()) {
 		return false, "请先移除当前职级下的员工信息", errors.New(fmt.Sprintf("当前职级存在员工信息ID：%d,工号:%s", employeeInfo.Employee.Id, employeeInfo.Employee.WorkNumber))
 	}
 

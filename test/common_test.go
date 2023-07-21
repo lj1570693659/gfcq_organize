@@ -12,7 +12,7 @@ import (
 func Test_Depart_GetList(t *testing.T) {
 	var (
 		ctx    = gctx.GetInitCtx()
-		conn   = grpcx.Client.MustNewGrpcClientConn("employee")
+		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
 		depert = v1.NewDepartmentClient(conn)
 		res    *v1.GetListDepartmentRes
 		err    error
@@ -37,7 +37,7 @@ func Test_Depart_GetList(t *testing.T) {
 func Test_Depart_GetOne(t *testing.T) {
 	var (
 		ctx    = gctx.GetInitCtx()
-		conn   = grpcx.Client.MustNewGrpcClientConn("employee")
+		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
 		depert = v1.NewDepartmentClient(conn)
 		res    *v1.GetOneDepartmentRes
 		err    error
@@ -57,7 +57,7 @@ func Test_Depart_GetOne(t *testing.T) {
 func Test_Depart_Create(t *testing.T) {
 	var (
 		ctx    = gctx.GetInitCtx()
-		conn   = grpcx.Client.MustNewGrpcClientConn("employee")
+		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
 		depert = v1.NewDepartmentClient(conn)
 		res    *v1.CreateDepartmentRes
 		err    error
@@ -78,7 +78,7 @@ func Test_Depart_Create(t *testing.T) {
 func Test_Depart_Modify(t *testing.T) {
 	var (
 		ctx    = gctx.GetInitCtx()
-		conn   = grpcx.Client.MustNewGrpcClientConn("employee")
+		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
 		depert = v1.NewDepartmentClient(conn)
 		res    *v1.ModifyDepartmentRes
 		err    error
@@ -100,13 +100,34 @@ func Test_Depart_Modify(t *testing.T) {
 func Test_Depart_Delete(t *testing.T) {
 	var (
 		ctx    = gctx.GetInitCtx()
-		conn   = grpcx.Client.MustNewGrpcClientConn("employee")
+		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
 		depert = v1.NewDepartmentClient(conn)
 		res    *v1.DeleteDepartmentRes
 		err    error
 	)
 	res, err = depert.Delete(ctx, &v1.DeleteDepartmentReq{
 		Id: 7,
+	})
+	fmt.Println("res=============", res)
+	fmt.Println("err=============", err)
+	if err != nil {
+		g.Log().Fatalf(ctx, `get user list failed: %+v`, err)
+	}
+
+}
+
+func Test_Depart_GetAll(t *testing.T) {
+	var (
+		ctx    = gctx.GetInitCtx()
+		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
+		depert = v1.NewDepartmentClient(conn)
+		res    *v1.GetListWithoutDepartmentRes
+		err    error
+	)
+	res, err = depert.GetListWithoutPage(ctx, &v1.GetListWithoutDepartmentReq{
+		Department: &v1.DepartmentInfo{
+			Pid: 4,
+		},
 	})
 	fmt.Println("res=============", res)
 	fmt.Println("err=============", err)

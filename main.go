@@ -8,5 +8,7 @@ import (
 )
 
 func main() {
+	//etcdLink, _ := g.Config("config.yaml").Get(context.Background(), "grpc.etcdLink")
+	//grpcx.Resolver.Register(etcd.New(etcdLink.String()))
 	cmd.Main.Run(gctx.New())
 }

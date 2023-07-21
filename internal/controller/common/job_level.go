@@ -21,6 +21,12 @@ func (s *JobLevelController) GetList(ctx context.Context, in *v1.GetListJobLevel
 	return res, err
 }
 
+// GetAll implements GetAll
+func (s *JobLevelController) GetAll(ctx context.Context, in *v1.GetAllJobLevelReq) (*v1.GetAllJobLevelRes, error) {
+	res, err := service.JobLevel().GetAll(ctx, in.GetJobLevel(), in.GetSort())
+	return res, err
+}
+
 func (s *JobLevelController) GetOne(ctx context.Context, in *v1.GetOneJobLevelReq) (*v1.GetOneJobLevelRes, error) {
 	res, err := service.JobLevel().GetOne(ctx, &v1.JobLevelInfo{
 		Id:   in.GetId(),
