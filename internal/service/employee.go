@@ -10,6 +10,7 @@ type (
 		Create(ctx context.Context, info *v1.CreateEmployeeReq) (*v1.CreateEmployeeRes, error)
 		GetOne(ctx context.Context, info *v1.GetOneEmployeeReq) (*v1.GetOneEmployeeRes, error)
 		GetList(ctx context.Context, info *v1.EmployeeInfo, page, size int32) (*v1.GetListEmployeeRes, error)
+		GetAll(ctx context.Context, info *v1.EmployeeInfo) (*v1.GetAllEmployeeRes, error)
 		Modify(ctx context.Context, info *v1.ModifyEmployeeReq) (*v1.ModifyEmployeeRes, error)
 		Delete(ctx context.Context, id int32) (isSuccess bool, msg string, err error)
 	}

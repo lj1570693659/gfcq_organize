@@ -7,7 +7,7 @@ require (
 	github.com/gogf/gf/contrib/rpc/grpcx/v2 v2.4.4
 	github.com/gogf/gf/v2 v2.4.4
 	github.com/gogo/protobuf v1.3.2
-	github.com/lj1570693659/gfcq_protoc v0.0.0-20230720030952-b7fbd76758d8
+	github.com/lj1570693659/gfcq_protoc v0.0.0-20230727051341-ec58c8c436eb
 	google.golang.org/grpc v1.56.1
 )
 

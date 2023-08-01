@@ -21,6 +21,12 @@ func (s *EmployeeController) GetList(ctx context.Context, in *v1.GetListEmployee
 	return res, err
 }
 
+// GetAll implements GetAll
+func (s *EmployeeController) GetAll(ctx context.Context, in *v1.GetAllEmployeeReq) (*v1.GetAllEmployeeRes, error) {
+	res, err := service.Employee().GetAll(ctx, in.GetEmployee())
+	return res, err
+}
+
 func (s *EmployeeController) GetOne(ctx context.Context, in *v1.GetOneEmployeeReq) (*v1.GetOneEmployeeRes, error) {
 	res, err := service.Employee().GetOne(ctx, &v1.GetOneEmployeeReq{
 		Id:         in.Id,

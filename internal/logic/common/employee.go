@@ -200,6 +200,67 @@ func (s *sEmployee) GetList(ctx context.Context, in *v1.EmployeeInfo, page, size
 	return res, err
 }
 
+func (s *sEmployee) GetAll(ctx context.Context, in *v1.EmployeeInfo) (*v1.GetAllEmployeeRes, error) {
+	res := &v1.GetAllEmployeeRes{}
+	resData := make([]*v1.EmployeeInfo, 0)
+	employeeEntity := make([]entity.Employee, 0)
+
+	query := dao.Employee.Ctx(ctx)
+
+	if len(in.GetUserName()) > 0 {
+		query = query.Where(fmt.Sprintf("%s like ?", dao.Employee.Columns().UserName), g.Slice{fmt.Sprintf("%s%s", in.GetUserName(), "%")})
+	}
+
+	if len(in.GetWorkNumber()) > 0 {
+		query = query.Where(fmt.Sprintf("%s like ?", dao.Employee.Columns().WorkNumber), g.Slice{fmt.Sprintf("%s%s", in.GetWorkNumber(), "%")})
+	}
+
+	if len(in.GetEmail()) > 0 {
+		query = query.Where(fmt.Sprintf("%s like ?", dao.Employee.Columns().Email), g.Slice{fmt.Sprintf("%s%s", in.GetEmail(), "%")})
+	}
+
+	if len(in.GetPhone()) > 0 {
+		query = query.Where(fmt.Sprintf("%s like ?", dao.Employee.Columns().Phone), g.Slice{fmt.Sprintf("%s%s", in.GetPhone(), "%")})
+	}
+
+	if len(in.DepartId) > 0 {
+		departIds := library.DeleteIntSlice(gconv.Int32s(strings.Split(in.DepartId, ",")))
+		if len(departIds) > 0 {
+			queryBuilder := query.Builder().Where(fmt.Sprintf("FIND_IN_SET(%d,%s)", departIds[0], dao.Employee.Columns().DepartId))
+			for _, departId := range departIds[1:] {
+				queryBuilder = queryBuilder.WhereOr(fmt.Sprintf("FIND_IN_SET(%d,%s)", departId, dao.Employee.Columns().DepartId))
+			}
+			query = query.Where(queryBuilder)
+		}
+
+	}
+
+	if len(in.JobId) > 0 {
+		jobIds := library.DeleteIntSlice(gconv.Int32s(strings.Split(in.JobId, ",")))
+		if len(jobIds) > 0 {
+			queryBuilder := query.Builder().Where(fmt.Sprintf("FIND_IN_SET(%d,%s)", jobIds[0], dao.Employee.Columns().JobId))
+			for _, jobId := range jobIds[1:] {
+				queryBuilder = queryBuilder.WhereOr(fmt.Sprintf("FIND_IN_SET(%d,%s)", jobId, dao.Employee.Columns().JobId))
+			}
+			query = query.Where(queryBuilder)
+		}
+	}
+
+	if in.GetJobLevel() > 0 {
+		query = query.Where(dao.Employee.Columns().JobLevel, in.GetJobLevel())
+	}
+	if in.GetStatus() > 0 {
+		query = query.Where(dao.Employee.Columns().Status, in.GetStatus())
+	}
+
+	err := query.Scan(&employeeEntity)
+	employeeEntityByte, _ := json.Marshal(employeeEntity)
+	json.Unmarshal(employeeEntityByte, &resData)
+
+	res.Data = resData
+	return res, err
+}
+
 func (s *sEmployee) Modify(ctx context.Context, in *v1.ModifyEmployeeReq) (*v1.ModifyEmployeeRes, error) {
 	res := &v1.ModifyEmployeeRes{}
 	if in.GetId() == 0 {

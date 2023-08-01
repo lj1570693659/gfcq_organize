@@ -76,9 +76,13 @@ func (s *sDepartment) GetOne(ctx context.Context, in *v1.DepartmentInfo) (*v1.De
 	if in.GetId() > 0 {
 		query = query.Where(dao.Department.Columns().Id, in.GetId())
 	}
+	if in.GetPid() > 0 {
+		query = query.Where(dao.Department.Columns().Pid, in.GetPid())
+	}
 
 	err := query.Scan(&depart)
-
+	fmt.Println("zidInfo.Id==err=======", err)
+	fmt.Println("zidInfo.Id==depart=======", depart)
 	return depart, err
 }
 
@@ -203,12 +207,14 @@ func (s *sDepartment) Modify(ctx context.Context, in *v1.DepartmentInfo) (*v1.De
 
 	return in, nil
 }
+
 func (s *sDepartment) Delete(ctx context.Context, id int32) (isSuccess bool, msg string, err error) {
 	if g.IsEmpty(id) {
 		return false, "当前操作的数据有误，请联系相关维护人员", errors.New("接收到的ID数据为空")
 	}
 
 	// 校验修改的原始数据是否存在
+	fmt.Println("0d-------------", id)
 	info, err := s.GetOne(ctx, &v1.DepartmentInfo{Id: id})
 	if (err != nil && err == sql.ErrNoRows) || info == nil {
 		return false, "当前数据不存在，请联系相关维护人员", errors.New("接收到的ID在数据库中没有对应数据")
@@ -217,17 +223,18 @@ func (s *sDepartment) Delete(ctx context.Context, id int32) (isSuccess bool, msg
 	// 删除父级部门时，校验子部门是否为空
 	if g.IsEmpty(info.Pid) {
 		zidInfo, err := s.GetOne(ctx, &v1.DepartmentInfo{Pid: id})
-		if err != nil && err != sql.ErrNoRows {
+		if err != nil && err.Error() != sql.ErrNoRows.Error() {
 			return false, "当前数据不存在，请联系相关维护人员", err
 		}
-		if !g.IsEmpty(zidInfo.Id) {
+
+		if !g.IsNil(zidInfo) && !g.IsEmpty(zidInfo.Id) {
 			return false, "请先移除当前部门下的子部门信息", errors.New(fmt.Sprintf("当前部门存在子部门信息ID：%d,name:%s", zidInfo.Id, zidInfo.Name))
 		}
 	}
 
 	// 删除部门时，该部门下不能存在员工信息
 	employeeInfo, err := service.Employee().GetOne(ctx, &v1.GetOneEmployeeReq{DepartId: []int32{id}})
-	if err != nil && err != sql.ErrNoRows {
+	if err != nil && err.Error() != sql.ErrNoRows.Error() {
 		return false, "当前数据有误，请联系相关维护人员", err
 	}
 

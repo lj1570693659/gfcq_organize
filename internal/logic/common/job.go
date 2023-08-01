@@ -108,6 +108,34 @@ func (s *sJob) GetList(ctx context.Context, in *v1.JobInfo, page, size int32) (*
 	res.Data = resData
 	return res, err
 }
+
+func (s *sJob) GetAll(ctx context.Context, in *v1.JobInfo) (*v1.GetAllJobRes, error) {
+	res := &v1.GetAllJobRes{}
+	resData := make([]*v1.JobInfo, 0)
+	jobEntity := make([]entity.Job, 0)
+
+	query := dao.Job.Ctx(ctx)
+
+	if len(in.GetName()) > 0 {
+		query = query.Where(fmt.Sprintf("%s like ?", dao.Job.Columns().Name), g.Slice{fmt.Sprintf("%s%s", in.GetName(), "%")})
+	}
+
+	if len(in.GetRemark()) > 0 {
+		query = query.Where(fmt.Sprintf("%s like ?", dao.Job.Columns().Remark), g.Slice{fmt.Sprintf("%s%s", in.GetRemark(), "%")})
+	}
+
+	if in.GetDepartId() > 0 {
+		query = query.Where(dao.Employee.Columns().DepartId, in.GetDepartId())
+	}
+
+	err := query.Scan(&jobEntity)
+	jobEntityByte, _ := json.Marshal(jobEntity)
+	json.Unmarshal(jobEntityByte, &resData)
+
+	res.Data = resData
+	return res, err
+}
+
 func (s *sJob) Modify(ctx context.Context, in *v1.JobInfo) (*v1.JobInfo, error) {
 	if in.GetId() == 0 {
 		return in, errors.New("请选择编辑的数据对象")
@@ -148,13 +176,13 @@ func (s *sJob) Delete(ctx context.Context, id int32) (isSuccess bool, msg string
 	}
 
 	// 删除岗位时，该岗位下不能存在员工信息 TODO
-	//employeeInfo, err := service.Employee().GetOne(ctx, &v1.EmployeeInfo{JobId: string(id)})
-	//if err != nil && err != sql.ErrNoRows {
-	//	return false, "当前数据有误，请联系相关维护人员", err
-	//}
-	//if !g.IsNil(employeeInfo) {
-	//	return false, "请先移除当前岗位下的员工信息", errors.New(fmt.Sprintf("当前岗位存在员工信息ID：%d,工号:%s", employeeInfo.Id, employeeInfo.WorkNumber))
-	//}
+	employeeInfo, err := service.EmployeeJob().GetOne(ctx, &v1.EmployeeJobInfo{JobId: id})
+	if err != nil && err.Error() != sql.ErrNoRows.Error() {
+		return false, "当前数据有误，请联系相关维护人员", err
+	}
+	if !g.IsNil(employeeInfo) {
+		return false, "请先移除当前岗位下的员工信息", errors.New(fmt.Sprintf("当前岗位存在员工信息ID：%d,员工信息:%d", employeeInfo.Id, employeeInfo.EmployeeId))
+	}
 
 	_, err = dao.Job.Ctx(ctx).Where(dao.Job.Columns().Id, id).Delete()
 	if err != nil {

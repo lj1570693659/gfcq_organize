@@ -10,6 +10,7 @@ type (
 		Create(ctx context.Context, info *v1.JobInfo) (*v1.JobInfo, error)
 		GetOne(ctx context.Context, info *v1.JobInfo) (*v1.JobInfo, error)
 		GetList(ctx context.Context, info *v1.JobInfo, page, size int32) (*v1.GetListJobRes, error)
+		GetAll(ctx context.Context, info *v1.JobInfo) (*v1.GetAllJobRes, error)
 		Modify(ctx context.Context, info *v1.JobInfo) (*v1.JobInfo, error)
 		Delete(ctx context.Context, id int32) (isSuccess bool, msg string, err error)
 	}

@@ -61,3 +61,8 @@ func (s *JobController) Delete(ctx context.Context, in *v1.DeleteJobReq) (*v1.De
 		Msg:       msg,
 	}, err
 }
+
+func (s *JobController) GetAll(ctx context.Context, in *v1.GetAllJobReq) (*v1.GetAllJobRes, error) {
+	res, err := service.Job().GetAll(ctx, in.GetJob())
+	return res, err
+}
