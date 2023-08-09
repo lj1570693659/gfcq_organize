@@ -2,17 +2,17 @@ package common
 
 import (
 	"context"
-	"github.com/gogf/gf/contrib/rpc/grpcx/v2"
 	"github.com/lj1570693659/gfcq_product/internal/service"
 	v1 "github.com/lj1570693659/gfcq_protoc/common/v1"
+	"google.golang.org/grpc"
 )
 
 type DepartmentController struct {
 	v1.UnimplementedDepartmentServer
 }
 
-func DepartmentRegister(s *grpcx.GrpcServer) {
-	v1.RegisterDepartmentServer(s.Server, &DepartmentController{})
+func DepartmentRegister(s *grpc.Server) {
+	v1.RegisterDepartmentServer(s, &DepartmentController{})
 }
 
 // GetList implements GetList

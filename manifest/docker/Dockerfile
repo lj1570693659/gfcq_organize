@@ -11,7 +11,7 @@ ENV WORKDIR /app/main
 
 # 添加应用可执行文件，并设置执行权限
 ADD ./main   $WORKDIR/main
-ADD ./manifest/config/config.yaml   $WORKDIR/manifest/config/config.yaml
+ADD ./manifest/config/config_docker.yaml   $WORKDIR/manifest/config/config.yaml
 RUN chmod +x $WORKDIR/main
 RUN chmod +x $WORKDIR/manifest/config/config.yaml
 

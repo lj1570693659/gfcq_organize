@@ -81,8 +81,6 @@ func (s *sDepartment) GetOne(ctx context.Context, in *v1.DepartmentInfo) (*v1.De
 	}
 
 	err := query.Scan(&depart)
-	fmt.Println("zidInfo.Id==err=======", err)
-	fmt.Println("zidInfo.Id==depart=======", depart)
 	return depart, err
 }
 

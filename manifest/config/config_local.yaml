@@ -9,7 +9,7 @@ grpc:
   errorLogPattern: "error-{Ymd}.log"
   accessLogEnabled: true
   accessLogPattern: "access-{Ymd}.log"
-  etcdLink: ":9090"
+  etcdLink: ":9091"
 
 # Global logging.
 logger:

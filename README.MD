@@ -16,7 +16,8 @@
 
 ### step2: 啟動gfcq_organize容器
 * docker build -t gfcq_organize_images -f .\manifest\docker\Dockerfile .
-* docker run -itd -p 9090:9090  --name gfcq_organize  --net host  gfcq_organize_images
+
+[//]: # (* docker run -itd -p 9090:9090  --name gfcq_organize  --net host  gfcq_organize_images)
 * docker run -itd -p 9090:9090  --name gfcq_organize  gfcq_organize_images
 
 

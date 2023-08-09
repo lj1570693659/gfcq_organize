@@ -29,7 +29,7 @@ func init() {
 }
 
 func (s *sEmployee) Create(ctx context.Context, in *v1.CreateEmployeeReq) (*v1.CreateEmployeeRes, error) {
-	res := &v1.CreateEmployeeRes{}
+	res := &v1.CreateEmployeeRes{Employee: &v1.EmployeeInfo{}}
 	in, err := s.checkInputData(ctx, in)
 	if err != nil {
 		return res, err
@@ -53,7 +53,6 @@ func (s *sEmployee) Create(ctx context.Context, in *v1.CreateEmployeeReq) (*v1.C
 	if err != nil {
 		return res, err
 	}
-
 	data.JobId = strings.Join(gconv.Strings(in.JobId), ",")
 	data.CreateTime = gtime.Now()
 	data.UpdateTime = gtime.Now()
@@ -64,12 +63,12 @@ func (s *sEmployee) Create(ctx context.Context, in *v1.CreateEmployeeReq) (*v1.C
 		if err != nil {
 			return err
 		}
-		id := gconv.Int32(lastInsertId)
-
+		res.Employee.Id = gconv.Int32(lastInsertId)
+		fmt.Println("res--222222222----------", res)
 		// 创建员工-岗位关联信息
 		for _, job := range departs {
 			if _, err = service.EmployeeJob().Create(ctx, &v1.EmployeeJobInfo{
-				EmployeeId: id,
+				EmployeeId: res.Employee.Id,
 				JobId:      job.Id,
 				DepartId:   job.DepartId,
 			}); err != nil {
@@ -398,7 +397,7 @@ func (s *sEmployee) checkInputData(ctx context.Context, in *v1.CreateEmployeeReq
 	departIds := make([]string, 0)
 	for _, jobId := range in.GetJobId() {
 		jobInfo, err := service.Job().GetOne(ctx, &v1.JobInfo{Id: jobId})
-		if (err != nil && err == sql.ErrNoRows) || g.IsNil(jobInfo) {
+		if (err != nil && err.Error() == sql.ErrNoRows.Error()) || g.IsNil(jobInfo) {
 			return in, errors.New("选择的岗位信息不存在，请再次确认")
 		}
 		departIds = append(departIds, gconv.String(jobInfo.DepartId))
@@ -413,13 +412,12 @@ func (s *sEmployee) checkInputData(ctx context.Context, in *v1.CreateEmployeeReq
 func (s *sEmployee) isUniqueWorkNumber(ctx context.Context, workNumber string, id int32) (*v1.EmployeeInfo, bool) {
 	// 工号不能重复
 	var employee *v1.EmployeeInfo
-	query := dao.Employee.Ctx(ctx).
-		Where(dao.Employee.Columns().WorkNumber, workNumber)
+	query := dao.Employee.Ctx(ctx).Where(dao.Employee.Columns().WorkNumber, workNumber)
 	if !g.IsEmpty(id) {
 		query = query.WhereNot(dao.Employee.Columns().Id, id)
 	}
 	err := query.Scan(&employee)
-	if (err != nil && err != sql.ErrNoRows) || !g.IsNil(employee) {
+	if (err != nil && err.Error() != sql.ErrNoRows.Error()) || !g.IsNil(employee) {
 		return employee, false
 	}
 
@@ -437,6 +435,7 @@ func (s *sEmployee) getDepartsByJobs(ctx context.Context, jobIds []int32) ([]*v1
 		jobInfo, err := service.Job().GetOne(ctx, &v1.JobInfo{
 			Id: jobId,
 		})
+
 		if err != nil {
 			return departs, err
 		}

@@ -2,17 +2,17 @@ package common
 
 import (
 	"context"
-	"github.com/gogf/gf/contrib/rpc/grpcx/v2"
 	"github.com/lj1570693659/gfcq_product/internal/service"
 	v1 "github.com/lj1570693659/gfcq_protoc/common/v1"
+	"google.golang.org/grpc"
 )
 
 type JobLevelController struct {
 	v1.UnimplementedJobLevelServer
 }
 
-func JobLevelRegister(s *grpcx.GrpcServer) {
-	v1.RegisterJobLevelServer(s.Server, &JobLevelController{})
+func JobLevelRegister(s *grpc.Server) {
+	v1.RegisterJobLevelServer(s, &JobLevelController{})
 }
 
 // GetList implements GetList
