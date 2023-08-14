@@ -14,6 +14,7 @@ type Department struct {
 	g.Meta     `orm:"table:cqgf_department, do:true"`
 	Id         interface{} //
 	Name       interface{} // 部门名称
+	Level       interface{} // 上级部门
 	Pid        interface{} // 上级部门
 	Remark     interface{} // 预留备注信息
 	CreateTime *gtime.Time // 数据新增时间

@@ -3,8 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
+	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/lj1570693659/gfcq_product/internal/controller/common"
+	_ "github.com/lj1570693659/gfcq_product/internal/logic/common"
+	_ "github.com/lj1570693659/gfcq_product/internal/logic/user"
 	"google.golang.org/grpc"
 	"net"
 )

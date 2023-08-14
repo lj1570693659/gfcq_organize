@@ -58,8 +58,9 @@ func (s *sJobLevel) Create(ctx context.Context, in *v1.JobLevelInfo) (*v1.JobLev
 	in.Id = gconv.Int32(lastInsertId)
 	return in, nil
 }
-func (s *sJobLevel) GetOne(ctx context.Context, in *v1.JobLevelInfo) (*v1.JobLevelInfo, error) {
-	jobLevel := &v1.JobLevelInfo{}
+func (s *sJobLevel) GetOne(ctx context.Context, in *v1.JobLevelInfo) (res *v1.JobLevelInfo, err error) {
+	res = &v1.JobLevelInfo{}
+	jobLevel := &entity.JobLevel{}
 	query := dao.JobLevel.Ctx(ctx)
 
 	if len(in.GetName()) > 0 {
@@ -69,9 +70,10 @@ func (s *sJobLevel) GetOne(ctx context.Context, in *v1.JobLevelInfo) (*v1.JobLev
 		query = query.Where(dao.JobLevel.Columns().Id, in.GetId())
 	}
 
-	err := query.Scan(&jobLevel)
-
-	return jobLevel, err
+	err = query.Scan(&jobLevel)
+	jobLevelByte, _ := json.Marshal(jobLevel)
+	json.Unmarshal(jobLevelByte, &res)
+	return res, err
 }
 
 func (s *sJobLevel) GetList(ctx context.Context, in *v1.JobLevelInfo, page, size int32) (*v1.GetListJobLevelRes, error) {

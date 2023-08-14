@@ -39,6 +39,7 @@ func (s *DepartmentController) GetOne(ctx context.Context, in *v1.GetOneDepartme
 func (s *DepartmentController) Create(ctx context.Context, in *v1.CreateDepartmentReq) (*v1.CreateDepartmentRes, error) {
 	res, err := service.Department().Create(ctx, &v1.DepartmentInfo{
 		Name:   in.GetName(),
+		Level:  in.GetLevel(),
 		Pid:    in.GetPid(),
 		Remark: in.GetRemark(),
 	})
@@ -51,6 +52,7 @@ func (s *DepartmentController) Modify(ctx context.Context, in *v1.ModifyDepartme
 	res, err := service.Department().Modify(ctx, &v1.DepartmentInfo{
 		Id:     in.GetId(),
 		Name:   in.GetName(),
+		Level:  in.GetLevel(),
 		Pid:    in.GetPid(),
 		Remark: in.GetRemark(),
 	})

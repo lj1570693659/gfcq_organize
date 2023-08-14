@@ -175,8 +175,8 @@ func (s *sEmployeeJob) Delete(ctx context.Context, info *v1.DeleteEmployeeJobReq
 		query = query.Where(dao.EmployeeJob.Columns().Id, info.Id)
 	} else if !g.IsEmpty(info.EmployeeId) {
 		employeeInfo, err := s.GetOne(ctx, &v1.EmployeeJobInfo{EmployeeId: info.EmployeeId})
-		if (err != nil && err == sql.ErrNoRows) || g.IsNil(employeeInfo) {
-			return false, "当前数据不存在，请联系相关维护人员", errors.New("接收到的EmployeeId在数据库中没有对应数据")
+		if (err != nil && err.Error() != sql.ErrNoRows.Error()) || g.IsNil(employeeInfo) {
+			g.Log("employee").Info(ctx, "接收到的EmployeeId在数据库中没有对应数据")
 		}
 		query = query.Where(dao.EmployeeJob.Columns().EmployeeId, info.EmployeeId)
 	}

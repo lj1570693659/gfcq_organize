@@ -54,6 +54,7 @@ func (s *sDepartment) Create(ctx context.Context, in *v1.DepartmentInfo) (*v1.De
 		Pid:        in.Pid,
 		Name:       in.Name,
 		Remark:     in.Remark,
+		Level:      in.Level,
 		CreateTime: gtime.Now(),
 		UpdateTime: gtime.Now(),
 	}
@@ -194,6 +195,7 @@ func (s *sDepartment) Modify(ctx context.Context, in *v1.DepartmentInfo) (*v1.De
 	data := do.Department{
 		Pid:        in.Pid,
 		Name:       in.Name,
+		Level:      in.Level,
 		Remark:     in.Remark,
 		UpdateTime: gtime.Now(),
 	}

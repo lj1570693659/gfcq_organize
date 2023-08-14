@@ -64,7 +64,6 @@ func (s *sEmployee) Create(ctx context.Context, in *v1.CreateEmployeeReq) (*v1.C
 			return err
 		}
 		res.Employee.Id = gconv.Int32(lastInsertId)
-		fmt.Println("res--222222222----------", res)
 		// 创建员工-岗位关联信息
 		for _, job := range departs {
 			if _, err = service.EmployeeJob().Create(ctx, &v1.EmployeeJobInfo{
