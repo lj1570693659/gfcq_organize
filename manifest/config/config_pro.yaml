@@ -1,6 +1,6 @@
 # GRPC Server.
 grpc:
-  address: ":9091"
+  address: ":9090"
   name: "organize"
   logPath: "/tmp/log/"
   logStdout: true
@@ -9,7 +9,7 @@ grpc:
   errorLogPattern: "error-{Ymd}.log"
   accessLogEnabled: true
   accessLogPattern: "access-{Ymd}.log"
-  etcdLink: ":9091"
+  etcdLink: ":9090"
 
 # Global logging.
 logger:
@@ -24,6 +24,6 @@ database:
     stdout: true
 
   default:
-    link: "mysql:root:123456@tcp(127.0.0.1:3807)/cqgf_product?loc=Local"
+    link: "mysql:root:123456@tcp(10.80.8.17:3807)/cqgf_product?loc=Local"
     debug: true
 

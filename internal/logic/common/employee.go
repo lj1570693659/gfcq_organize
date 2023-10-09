@@ -187,7 +187,7 @@ func (s *sEmployee) GetList(ctx context.Context, in *v1.EmployeeInfo, page, size
 	if err != nil {
 		return res, err
 	}
-	err = query.Scan(&employeeEntity)
+	err = query.OrderDesc(dao.Employee.Columns().Id).Scan(&employeeEntity)
 	employeeEntityByte, _ := json.Marshal(employeeEntity)
 	json.Unmarshal(employeeEntityByte, &resData)
 

@@ -44,6 +44,7 @@ func (s *sDepartment) Create(ctx context.Context, in *v1.DepartmentInfo) (*v1.De
 		Pid:  in.GetPid(),
 		Name: in.GetName(),
 	})
+
 	if (err != nil && err != sql.ErrNoRows) || !g.IsNil(info) {
 		return in, err
 	}
@@ -214,7 +215,6 @@ func (s *sDepartment) Delete(ctx context.Context, id int32) (isSuccess bool, msg
 	}
 
 	// 校验修改的原始数据是否存在
-	fmt.Println("0d-------------", id)
 	info, err := s.GetOne(ctx, &v1.DepartmentInfo{Id: id})
 	if (err != nil && err == sql.ErrNoRows) || info == nil {
 		return false, "当前数据不存在，请联系相关维护人员", errors.New("接收到的ID在数据库中没有对应数据")

@@ -24,6 +24,6 @@ database:
     stdout: true
 
   default:
-    link: "mysql:root:123456@tcp(172.25.0.5:3306)/cqgf_product"
+    link: "mysql:root:123456@tcp(172.25.0.5:3306)/cqgf_product?loc=Local"
     debug: true
 
