@@ -15,6 +15,5 @@ pkg/
 bin/
 cbuild
 */.DS_Store
-main
 .vscode
 temp/
