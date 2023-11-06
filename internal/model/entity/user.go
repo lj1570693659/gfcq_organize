@@ -13,7 +13,10 @@ type User struct {
 	Id       uint        `json:"id"       description:"User ID"`
 	Passport string      `json:"passport" description:"User Passport"`
 	Password string      `json:"password" description:"User Password"`
+	UserName string      `json:"userName" description:"User Nickname"`
 	Nickname string      `json:"nickname" description:"User Nickname"`
-	CreateAt *gtime.Time `json:"createAt" description:"Created Time"`
-	UpdateAt *gtime.Time `json:"updateAt" description:"Updated Time"`
+	EmployeeId int32      `json:"employee_id" description:"User Nickname"`
+	WorkNumber string      `json:"workNumber" description:"Work Number"`
+	CreateTime *gtime.Time `json:"createTime" description:"Created Time"`
+	UpdateTime *gtime.Time `json:"updateTime" description:"Updated Time"`
 }

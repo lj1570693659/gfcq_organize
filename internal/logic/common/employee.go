@@ -76,7 +76,6 @@ func (s *sEmployee) Create(ctx context.Context, in *v1.CreateEmployeeReq) (*v1.C
 		}
 		return nil
 	})
-
 	return res, err
 }
 

@@ -16,7 +16,7 @@ func Test_Create(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
 		var (
 			ctx  = gctx.GetInitCtx()
-			conn = grpcx.Client.MustNewGrpcClientConn("demo")
+			conn = grpcx.Client.MustNewGrpcClientConn("local")
 			user = v1.NewUserClient(conn)
 		)
 		//for i := 1; i <= 10; i++ {
@@ -36,13 +36,14 @@ func Test_GetList(t *testing.T) {
 	//gtest.C(t, func(t *gtest.T) {
 	var (
 		ctx   = gctx.GetInitCtx()
-		conn  = grpcx.Client.MustNewGrpcClientConn("employee")
+		conn  = grpcx.Client.MustNewGrpcClientConn("jiao")
 		user  = v1.NewUserClient(conn)
 		res   *v1.GetListRes
 		err   error
 		size  int32 = 2
 		pages       = []int32{1, 2, 3}
 	)
+	fmt.Println("conn=============", conn)
 	for _, page := range pages {
 		res, err = user.GetList(ctx, &v1.GetListReq{
 			Page: page,

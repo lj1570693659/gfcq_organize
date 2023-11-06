@@ -1,7 +1,7 @@
 package cmd
 
 var (
-// Main is the main command.
+//Main is the main command.
 //Main = gcmd.Command{
 //	Name:  "gfcq_product",
 //	Usage: "main",
@@ -20,10 +20,8 @@ var (
 //		//s := grpcx.Server.New(c)
 //		//user.Register(s)
 //		common.DepartmentRegister(s)
-//		//common.EmployeeRegister(s)
-//		//common.EmployeeJobRegister(s)
-//		//common.JobRegister(s)
-//		//common.JobLevelRegister(s)
+//		wechat.WechatTokenRegister(s)
+//		wechat.WechatUserRegister(s)
 //		listener, err := net.Listen("tcp", "127.0.0.1:9090")
 //		if err != nil {
 //			fmt.Println(err)

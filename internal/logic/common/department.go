@@ -31,12 +31,12 @@ func (s *sDepartment) Create(ctx context.Context, in *v1.DepartmentInfo) (*v1.De
 
 	// 上级部门存在时，数据校验
 	if in.GetPid() > 0 {
-		pidInfo, err := s.GetOne(ctx, &v1.DepartmentInfo{
-			Id: in.GetPid(),
-		})
-		if (err != nil && err == sql.ErrNoRows) || pidInfo == nil {
-			return in, errors.New("选择的上级部门不存在，请确认是否增加")
-		}
+		//pidInfo, err := s.GetOne(ctx, &v1.DepartmentInfo{
+		//	Id: in.GetPid(),
+		//})
+		//if (err != nil && err == sql.ErrNoRows) || pidInfo == nil {
+		//	return in, errors.New("选择的上级部门不存在，请确认是否增加")
+		//}
 	}
 
 	// 同级部门不能重名
@@ -52,12 +52,15 @@ func (s *sDepartment) Create(ctx context.Context, in *v1.DepartmentInfo) (*v1.De
 		return in, errors.New("该部门下已存在同名部门，请重新命名")
 	}
 	data := do.Department{
-		Pid:        in.Pid,
-		Name:       in.Name,
-		Remark:     in.Remark,
-		Level:      in.Level,
-		CreateTime: gtime.Now(),
-		UpdateTime: gtime.Now(),
+		Id:               in.Id,
+		Pid:              in.Pid,
+		Name:             in.Name,
+		NameEn:           in.NameEn,
+		DepartmentLeader: in.DepartmentLeader,
+		Remark:           in.Remark,
+		Level:            in.Level,
+		CreateTime:       gtime.Now(),
+		UpdateTime:       gtime.Now(),
 	}
 
 	lastInsertId, err := dao.Department.Ctx(ctx).Data(data).InsertAndGetId()
@@ -69,11 +72,13 @@ func (s *sDepartment) Create(ctx context.Context, in *v1.DepartmentInfo) (*v1.De
 }
 
 func (s *sDepartment) GetOne(ctx context.Context, in *v1.DepartmentInfo) (*v1.DepartmentInfo, error) {
+	fmt.Println("depart------------------GetOne--------------------", in.GetId())
 	var depart *v1.DepartmentInfo
 	query := dao.Department.Ctx(ctx)
 
 	if len(in.GetName()) > 0 {
-		query = query.Where(fmt.Sprintf("%s like ?", dao.Department.Columns().Name), g.Slice{fmt.Sprintf("%s%s", in.GetName(), "%")})
+		//query = query.Where(fmt.Sprintf("%s like ?", dao.Department.Columns().Name), g.Slice{fmt.Sprintf("%s%s", in.GetName(), "%")})
+		query = query.Where(dao.Department.Columns().Name, in.GetName())
 	}
 	if in.GetId() > 0 {
 		query = query.Where(dao.Department.Columns().Id, in.GetId())
@@ -194,11 +199,13 @@ func (s *sDepartment) Modify(ctx context.Context, in *v1.DepartmentInfo) (*v1.De
 	}
 
 	data := do.Department{
-		Pid:        in.Pid,
-		Name:       in.Name,
-		Level:      in.Level,
-		Remark:     in.Remark,
-		UpdateTime: gtime.Now(),
+		Pid:              in.Pid,
+		Name:             in.Name,
+		NameEn:           in.NameEn,
+		DepartmentLeader: in.DepartmentLeader,
+		Level:            in.Level,
+		Remark:           in.Remark,
+		UpdateTime:       gtime.Now(),
 	}
 
 	_, err = dao.Department.Ctx(ctx).Where(dao.Department.Columns().Id, in.GetId()).Data(data).Update()

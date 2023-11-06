@@ -37,15 +37,16 @@ func Test_Depart_GetList(t *testing.T) {
 func Test_Depart_GetOne(t *testing.T) {
 	var (
 		ctx    = gctx.GetInitCtx()
-		conn   = grpcx.Client.MustNewGrpcClientConn("organize")
+		conn   = grpcx.Client.MustNewGrpcClientConn("jiao")
 		depert = v1.NewDepartmentClient(conn)
 		res    *v1.GetOneDepartmentRes
 		err    error
 	)
 	res, err = depert.GetOne(ctx, &v1.GetOneDepartmentReq{
-		Name: "人事室",
+		Name: "总经办",
 		Id:   0,
 	})
+	fmt.Println("conn=============", conn)
 	fmt.Println("res=============", res)
 	fmt.Println("err=============", err)
 	if err != nil {

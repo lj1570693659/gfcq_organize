@@ -20,6 +20,8 @@ type Employee struct {
 	Email        interface{} // 邮箱号码
 	DepartId     interface{} // 所属部门
 	JobLevel     interface{} // 职级
+	DirectLeader interface{} // 岗位信息
+	IsLeaderInDept interface{} // 岗位信息
 	JobId        interface{} // 岗位信息
 	InstructorId interface{} // 指导老师
 	Status       interface{} // 在职状态（1：在职 2：试用期 3：实习期 4：已离职）

@@ -7,6 +7,7 @@ package service
 
 import (
 	"context"
+	"github.com/lj1570693659/gfcq_product/internal/model/entity"
 
 	"github.com/lj1570693659/gfcq_protoc/pbentity"
 )
@@ -14,6 +15,8 @@ import (
 type (
 	IUser interface {
 		GetById(ctx context.Context, uid uint64) (*pbentity.User, error)
+		GetInfo(ctx context.Context, info entity.User) (entity.User, error)
+		Create(ctx context.Context, info entity.User) (error)
 		DeleteById(ctx context.Context, uid uint64) error
 	}
 )

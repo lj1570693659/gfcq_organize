@@ -19,6 +19,7 @@ type Employee struct {
 	DepartId     string      `json:"departId"     description:"所属部门"`
 	JobLevel     uint        `json:"jobLevel"     description:"职级"`
 	JobId        string      `json:"jobId"        description:"岗位信息"`
+	DirectLeader string         `json:"directLeader" description:"直接上级"`
 	InstructorId int         `json:"instructorId" description:"指导老师"`
 	Status       int         `json:"status"       description:"在职状态（1：在职 2：试用期 3：实习期 4：已离职）"`
 	Remark       string      `json:"remark"       description:"预留备注信息"`

@@ -64,7 +64,7 @@ func (s *sJobLevel) GetOne(ctx context.Context, in *v1.JobLevelInfo) (res *v1.Jo
 	query := dao.JobLevel.Ctx(ctx)
 
 	if len(in.GetName()) > 0 {
-		query = query.Where(fmt.Sprintf("%s like ?", dao.JobLevel.Columns().Name), g.Slice{fmt.Sprintf("%s%s", in.GetName(), "%")})
+		query = query.Where(dao.JobLevel.Columns().Name, in.GetName())
 	}
 	if in.GetId() > 0 {
 		query = query.Where(dao.JobLevel.Columns().Id, in.GetId())

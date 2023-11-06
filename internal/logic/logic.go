@@ -5,4 +5,5 @@
 package logic
 
 import (
+	_ "github.com/lj1570693659/gfcq_product/internal/logic/wechat"
 )

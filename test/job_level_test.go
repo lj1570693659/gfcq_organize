@@ -12,12 +12,13 @@ import (
 func Test_JobLevel_GetList(t *testing.T) {
 	var (
 		ctx    = gctx.GetInitCtx()
-		conn   = grpcx.Client.MustNewGrpcClientConn("employee")
+		conn   = grpcx.Client.MustNewGrpcClientConn("jiao")
 		depert = v1.NewJobLevelClient(conn)
 		res    *v1.GetListJobLevelRes
 		err    error
 		size   int32 = 3
 	)
+	fmt.Println("conn=============", conn)
 	res, err = depert.GetList(ctx, &v1.GetListJobLevelReq{
 		Page: 1,
 		Size: size,

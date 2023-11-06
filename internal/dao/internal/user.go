@@ -24,6 +24,7 @@ type UserColumns struct {
 	Passport string // User Passport
 	Password string // User Password
 	Nickname string // User Nickname
+	WorkNumber string // User Nickname
 	CreateAt string // Created Time
 	UpdateAt string // Updated Time
 }
@@ -34,15 +35,16 @@ var userColumns = UserColumns{
 	Passport: "passport",
 	Password: "password",
 	Nickname: "nickname",
-	CreateAt: "create_at",
-	UpdateAt: "update_at",
+	WorkNumber: "work_number",
+	CreateAt: "create_time",
+	UpdateAt: "update_time",
 }
 
 // NewUserDao creates and returns a new DAO object for table data access.
 func NewUserDao() *UserDao {
 	return &UserDao{
 		group:   "default",
-		table:   "user",
+		table:   "cqgf_user",
 		columns: userColumns,
 	}
 }

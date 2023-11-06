@@ -27,3 +27,27 @@ database:
     link: "mysql:root:123456@tcp(10.80.8.17:3807)/cqgf_product?loc=Local"
     debug: true
 
+# Redis 配置示例
+redis:
+  # 单实例配置示例1
+  default:
+    address: "10.80.8.17:6379"
+    db:      5
+    departDb:      6
+    pass: ""
+    idleTimeout: 600
+
+wechat:
+  corpId: "wwc07c4a74b39f70f3"
+  user:
+    secret: "9REdAVL4seSzAOVGYCdABvmLaBnPUgI-6VQQazj3l7U"
+  product:
+    secret: "ojHGdgMXf677jS31_K7ZofMjl9BkgEpk8mAvsu8wvDo"
+  person:
+    secret: "qiZoWq4M9_T3h5g8t3IXTG-cBlv1VcaH_Lk5WDhqits"
+    agentId: 3010185
+  checkIn:
+    secret: "YLtmEj8JNCtebxVju4LeH9zCxVhksseWBrEUvRXANZM"
+  approve:
+    secret: "hv2w5EsctesEXm0ttjzmcZK-LvvadFyZx-OoleANBcA"
+
