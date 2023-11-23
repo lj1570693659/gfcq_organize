@@ -163,16 +163,29 @@ type SendImgMsgApiReq struct {
 
 // SendTextMsgApiReq 发送文本消息请求参数
 type SendTextMsgApiReq struct {
-	Touser  string `json:"touser"`
-	Toparty string `json:"toparty"`
-	Totag   string `json:"totag"`
-	Msgtype string `json:"msgtype"`
-	Agentid int    `json:"agentid"`
-	Text    struct {
-		Content string `json:"content"`
-	} `json:"text"`
-	Safe                   int `json:"safe"`
-	EnableIdTrans          int `json:"enable_id_trans"`
-	EnableDuplicateCheck   int `json:"enable_duplicate_check"`
-	DuplicateCheckInterval int `json:"duplicate_check_interval"`
+	Touser                 string         `json:"touser"`
+	Toparty                string         `json:"toparty"`
+	Totag                  string         `json:"totag"`
+	Msgtype                string         `json:"msgtype"`
+	Agentid                int            `json:"agentid"`
+	Text                   TextMsgContent `json:"text"`
+	Safe                   int            `json:"safe"`
+	EnableIdTrans          int            `json:"enable_id_trans"`
+	EnableDuplicateCheck   int            `json:"enable_duplicate_check"`
+	DuplicateCheckInterval int            `json:"duplicate_check_interval"`
+}
+
+type TextMsgContent struct {
+	Content string `json:"content"`
+}
+
+type HttpWechatMsgRes struct {
+	ErrCode        int32  `json:"errcode"`
+	ErrMsg         string `json:"errmsg"`
+	InvalidUser    string `json:"invaliduser"`
+	InvalidParty   string `json:"invalidparty"`
+	InvalidTag     string `json:"invalidtag"`
+	UnlicensedUser string `json:"unlicenseduser"`
+	MsgID          string `json:"msgid"`
+	ResponseCode   string `json:"response_code"`
 }

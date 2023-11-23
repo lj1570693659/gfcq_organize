@@ -54,4 +54,8 @@ wechat:
     secret: "YLtmEj8JNCtebxVju4LeH9zCxVhksseWBrEUvRXANZM"
   approve:
     secret: "hv2w5EsctesEXm0ttjzmcZK-LvvadFyZx-OoleANBcA"
+    agentId: 3010040
+  task:
+    secret: "IQ9_OF8_WGR_ueDyXBDNLyMGqCqPqi4XNy_wOmROtiY"
+    agentId: 1000062
 

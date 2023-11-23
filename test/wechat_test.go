@@ -15,7 +15,13 @@ func Test_Wechat_Checkin(t *testing.T) {
 		panic(err)
 	}
 	conn := v1.NewWechatCheckInClient(OrganizeServer)
-	res, err := conn.SendMsg(context.Background(), &v1.SendTextMsgReq{})
+	res, err := conn.SendMsg(context.Background(), &v1.SendTextMsgReq{
+		Touser:  []string{"6046051"},
+		Msgtype: "text",
+		Content: &v1.TextContent{
+			Content: "jiaojiao",
+		},
+	})
 	fmt.Println("conn=============", conn)
 	fmt.Println("res=============", res)
 }

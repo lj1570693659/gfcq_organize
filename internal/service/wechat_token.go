@@ -7,6 +7,7 @@ import (
 type (
 	IWechatToken interface {
 		GetToken(ctx context.Context, keyName string) (string, error)
+		GetAgentId(ctx context.Context, keyName string) (int, error)
 		//DeleteById(ctx context.Context, uid uint64) error
 	}
 )

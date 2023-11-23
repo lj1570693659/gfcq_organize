@@ -41,8 +41,8 @@ github.com/grokify/html-strip-tags-go v0.0.1 h1:0fThFwLbW7P/kOiTBs03FsJSV9RM2M/Q
 github.com/grokify/html-strip-tags-go v0.0.1/go.mod h1:2Su6romC5/1VXOQMaWL2yb618ARB8iVo6/DR99A6d78=
 github.com/kisielk/errcheck v1.5.0/go.mod h1:pFxgyoBC7bSaBwPgfKdkLd5X25qrDl4LWUI2bnpBCr8=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
-github.com/lj1570693659/gfcq_protoc v0.0.0-20231104075853-ade257c53832 h1:+ULox91TkTmLyj/LSbBmd5whL3zsNI1Jjf6JwOx8tT4=
-github.com/lj1570693659/gfcq_protoc v0.0.0-20231104075853-ade257c53832/go.mod h1:TkvxowyGm/JrfkwHOR96Tba0YJ+jR58DXIDF8BZ9+oI=
+github.com/lj1570693659/gfcq_protoc v0.0.0-20231116005300-2f5c5d6014c3 h1:IrRl+jwpwLqF2Mq9mdlHkxa54A6BdY1fDUqn0F0sYfY=
+github.com/lj1570693659/gfcq_protoc v0.0.0-20231116005300-2f5c5d6014c3/go.mod h1:TkvxowyGm/JrfkwHOR96Tba0YJ+jR58DXIDF8BZ9+oI=
 github.com/magiconair/properties v1.8.6 h1:5ibWZ6iY0NctNGWo87LalDlEZ6R41TqbbDamhfG/Qzo=
 github.com/magiconair/properties v1.8.6/go.mod h1:y3VJvCyxH9uVvJTWEGAELF3aiYNyPKd5NZ3oSwXrF60=
 github.com/mattn/go-colorable v0.1.13 h1:fFA4WZxdEF4tXPZVKMLwD8oUnCTTo08duU7wxecdEvA=

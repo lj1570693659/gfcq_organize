@@ -15,6 +15,7 @@ import (
 	common "github.com/lj1570693659/gfcq_protoc/common/v1"
 	v1 "github.com/lj1570693659/gfcq_protoc/wechat/v1"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -27,6 +28,7 @@ func init() {
 }
 
 func (s *sCheckIn) GetUserCheckInDayData(ctx context.Context, req *v1.GetUserCheckInDayDataReq) (*v1.GetUserCheckInDayDataRes, error) {
+	g.Log().Info(ctx, fmt.Sprintf("GetUserCheckInDayData----logic-request--%v", req))
 	res := &v1.GetUserCheckInDayDataRes{}
 	resData := &entity.HttpWechatCheckInDayDataRes{}
 	// 1: 查询部门信息
@@ -137,26 +139,41 @@ func (s *sCheckIn) getUserCheckInDayData(ctx context.Context, req *v1.GetUserChe
 
 func (s *sCheckIn) SendMsg(ctx context.Context, req *v1.SendTextMsgReq) (*v1.SendMsgRes, error) {
 	res := &v1.SendMsgRes{}
-	//tokenServer := SWechatToken{}
-	//token, err := tokenServer.GetToken(ctx, consts.CheckIn)
-	//if err != nil {
-	//	return res, err
-	//}
-	//
-	//// 1： 获取部门用户信息
-	//url := fmt.Sprintf(dao.SendMsgApi, token)
-	//reqData := entity.SendTextMsgApiReq{
-	//	Touser
-	//	Toparty
-	//	Totag
-	//	Msgtype
-	//	Agentid
-	//	Text
-	//}
-	//reqDataByte, _ := json.Marshal(reqData)
-	//getDayData, err := library.SendPostHttp(ctx, url, string(reqDataByte))
-	//if err != nil {
-	//	return res, err
-	//}
-	return res, nil
+	tokenServer := SWechatToken{}
+	token, err := tokenServer.GetToken(ctx, consts.ProductTask)
+	if err != nil {
+		return res, err
+	}
+
+	// 1： 获取部门用户信息
+	url := fmt.Sprintf(dao.SendMsgApi, token)
+	agentid, err := tokenServer.GetAgentId(ctx, consts.ProductTask)
+	reqData := entity.SendTextMsgApiReq{
+		Touser:  strings.Join(req.Touser, "|"),
+		Msgtype: req.Msgtype,
+		Agentid: agentid,
+		Text: entity.TextMsgContent{
+			Content: req.Content.Content,
+		},
+	}
+	reqDataByte, _ := json.Marshal(reqData)
+	getPostRes, err := library.SendPostHttp(ctx, url, string(reqDataByte))
+	entityData := &entity.HttpWechatMsgRes{}
+	json.Unmarshal(getPostRes, &entityData)
+	if !g.IsEmpty(entityData.ErrCode) {
+		return res, errors.New(entityData.ErrMsg)
+	}
+	if err != nil {
+		return res, err
+	}
+	return &v1.SendMsgRes{
+		ErrCode:        entityData.ErrCode,
+		ErrMsg:         entityData.ErrMsg,
+		InvalidUser:    entityData.InvalidUser,
+		InvalidParty:   entityData.InvalidParty,
+		InvalidTag:     entityData.InvalidTag,
+		UnlicensedUser: entityData.UnlicensedUser,
+		MsgID:          entityData.MsgID,
+		ResponseCode:   entityData.ResponseCode,
+	}, nil
 }

@@ -18,6 +18,7 @@ const (
 	ProductBookKey             = "product"
 	PersonBookKey              = "person"
 	CheckIn                    = "checkIn"
+	ProductTask                = "task"
 
 	GSHA1 = "gsha1"
 	MD5   = "md5"

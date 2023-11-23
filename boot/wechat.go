@@ -28,6 +28,4 @@ func init() {
 		Password: pass.String(),  // no password set
 		DB:       departDb.Int(), // use default DB
 	})
-
-	//docker run -p 6379:6379 --name gfcq_redis -v D:\code\product\golang\src\gfcq_organize\manifest\redis\redis.conf:/etc/redis/redis.conf --restart=always --network gfcq -d redis redis-server /etc/redis/redis.conf
 }
